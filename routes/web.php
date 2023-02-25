@@ -1,7 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Jobs\SendWelcomeEmail;
+use App\Jobs\SendWelcomeEmailFailed;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
+// Queue
 Route::get('/queue', function () {
     SendWelcomeEmail::dispatch();
 
@@ -24,11 +26,20 @@ Route::get('/queue', function () {
 
 });
 
+// Non-queue
 Route::get('/non-queue', function () {
     SendWelcomeEmail::dispatchSync();
 
     return '<br>Welcome to Seminar';
 
 });
+
+// Failed Queue
+Route::get('/failed-queue', function () {
+    SendWelcomeEmailFailed::dispatch();
+
+    return 'Failed Job...';
+});
+
 
 require __DIR__.'/auth.php';

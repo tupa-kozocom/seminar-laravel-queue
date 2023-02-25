@@ -1,9 +1,7 @@
 <?php
 
-use App\Models\User;
-use App\Jobs\JobProcess;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
+use App\Jobs\SendWelcomeEmail;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,9 +15,20 @@ use App\Http\Controllers\ProfileController;
 */
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
+
 Route::get('/queue', function () {
-    JobProcess::dispatch();
+    SendWelcomeEmail::dispatch();
+
+    return 'Welcome to Seminar';
+
+});
+
+Route::get('/non-queue', function () {
+    SendWelcomeEmail::dispatchSync();
+
+    return '<br>Welcome to Seminar';
+
 });
 
 require __DIR__.'/auth.php';
